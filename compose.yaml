@@ -1,0 +1,41 @@
+name: app
+
+networks:
+  app-net:
+    driver: bridge
+
+volumes:
+  db-data:
+
+secrets:
+  postgres_password:
+    file: secrets.txt
+
+services:
+  postgres:
+    image: postgres:latest
+    secrets:
+      - postgres_password
+    environment:
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER=postgres
+    networks:
+      - app-net
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  web:
+    image: web
+    env_file:
+      - application-dev.env
+    environment:
+      # в моем случае именно этот пароль лежит в secrets.txt
+      # по-хорошему надо бы разобраться с https://github.com/kwonghung-YIP/spring-boot-docker-secret/tree/master, но мне лень :/
+      - SPRING_DATASOURCE_PASSWORD=cool_pass
+    ports:
+      - "8080:8080"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - app-net
