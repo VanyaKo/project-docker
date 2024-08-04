@@ -12,8 +12,8 @@ RUN apk --no-cache add openjdk17
 WORKDIR /app
 COPY --from=base /spring-starter/build/libs/spring-starter-*.jar ./service.jar
 
-COPY application-dev.yaml .
+#COPY application-dev.yaml .
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "service.jar"]
-CMD ["--spring.config.location=classpath:/application.yml, file:application-dev.yaml"]
+#CMD ["--spring.config.location=classpath:/application.yml, file:application-dev.yaml"]
