@@ -39,3 +39,5 @@ services:
       dockerfile: Dockerfile
     networks:
       - app-net
+    depends_on:
+      - postgres
